@@ -16,6 +16,7 @@ export default {
         `${process.env.VUE_APP_CONTEXT}_002`,   // 地图标签操作统计界面
       ]
     }
+    console.log('userData', data)
     // let { data } = await getUserInfo({ noMsg: true })
     context.commit(types.SET_USER_INFO, data)
     return {

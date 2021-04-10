@@ -1,8 +1,10 @@
-//第一个参数是用来创建路由，第二个是history模式  第三个是hash模式
-import { createRouter, createWebHistory, createWebHashHistory  } from 'vue-router'
+import Vue from 'vue'
+import Router from 'vue-router'
 import store from '@/store'
 
 import routes from '../router.config.js'
+
+Vue.use(Router)
 
 const createRoute = (routes) => {
   return routes.reduce((processedRoutes, currentRoute) => {
@@ -12,7 +14,7 @@ const createRoute = (routes) => {
 }
 
 const processRouteObj = ({ menuCode, breadcrumb, children, component, ...args }) => {
-  // console.log('component', component)
+  console.log('component', component)
   return Object.assign({
     meta: { menuCode },
     props: {
@@ -26,8 +28,8 @@ const processRouteObj = ({ menuCode, breadcrumb, children, component, ...args })
   }, args)
 }
 
-const router = createRouter({
-  history: createWebHistory(),  // 此处替换上面的参数即可更换模式，我这里暂时使用hash
+const router = new Router({
+  mode: 'history',
   base: process.env.BASE_URL,
   routes: createRoute(routes)
 })
@@ -35,10 +37,8 @@ const router = createRouter({
 // 全局路由导航守卫
 router.beforeEach(async (to, form, next) => {
   const { userInfo: { code } } = store.state
-
-  console.log('全局导航守卫');
   // 防止死循环跳出
-  if (~to.path.indexOf('error')) {
+  if (to.path.indexOf('error') > -1) {
     next()
     return
   }
