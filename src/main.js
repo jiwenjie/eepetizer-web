@@ -1,13 +1,7 @@
 import { createApp } from 'vue';
-import App from './App.vue';
+import initAppView from './initApp';    // 导入 vue 初始化文件
 
-// 引入路由文件
-import router from './router/index';
+// 实例化运行 vue
+initAppView(createApp);
 
-// 引入 store 文件
-import store from '@/store'
 
-createApp(App)
-    .use(router)
-    .use(store)
-    .mount('#app')

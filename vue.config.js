@@ -6,13 +6,17 @@ module.exports = {
   assetsDir: process.env.VUE_APP_ASSETS,
   runtimeCompiler: true,
   lintOnSave: true,
+
   devServer: {
     overlay: {
       warnings: false, //不显示警告
       // errors: false	//不显示错误
     }
   },
-  lintOnSave: false, //关闭eslint检查
+
+  //关闭eslint检查
+  lintOnSave: false,
+
   configureWebpack () {
     if (isProd) {
       return {
@@ -21,6 +25,7 @@ module.exports = {
       }
     }
   },
+
   // 默认babel-loader会忽略node_modules中的文件
   // 但是dolphin-plugin-tools用了es6的语法, 配置对其显示转译
   // 配合babel sourceType: 'unambiguous'来使用 https://github.com/babel/babel/issues/9187,
@@ -28,6 +33,7 @@ module.exports = {
     'dolphin-plugin-tools',
     /@hui-pro/
   ],
+
   chainWebpack: (config) => {
     if (isProd) {
       // 打包的css如有必要加上@charset
@@ -41,6 +47,7 @@ module.exports = {
       })
     }
   },
+
   // 用于开发环境下与后端联调
   // 如有需要, 还可以配合easy-proxy进行使用
   devServer: {
@@ -57,6 +64,13 @@ module.exports = {
         target: 'http://10.194.98.123:1709',  // 后台 
         changeOrigin: true
       },
+    }
+  },
+
+  pluginOptions: {
+    'style-resources-loader': {
+      preProcessor: 'less',
+      patterns: []
     }
   }
 }

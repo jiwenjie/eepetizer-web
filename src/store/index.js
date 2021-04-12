@@ -7,6 +7,7 @@ const state = {
 }
 
 export default createStore({
+  getters: {}, 
   state,
   actions,
   mutations,
