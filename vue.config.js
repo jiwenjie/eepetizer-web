@@ -31,7 +31,6 @@ module.exports = {
   // 配合babel sourceType: 'unambiguous'来使用 https://github.com/babel/babel/issues/9187,
   transpileDependencies: [
     'dolphin-plugin-tools',
-    /@hui-pro/
   ],
 
   chainWebpack: (config) => {
