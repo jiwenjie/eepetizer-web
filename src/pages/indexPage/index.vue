@@ -6,8 +6,7 @@
  -->
 <template>
   <div id="indexDIV" class="page-container">
-    saca
-    <el-button type="primary">el-button</el-button>
+    
   </div>
 </template>
 
