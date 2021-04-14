@@ -4,6 +4,13 @@
     box-sizing: border-box;
 } */
 
+@font-face {
+    font-family: "SourceHanSansCN-Medium";
+    src: url('../../public/fonts/AkzidenzGrotesk-Medium.otf');
+    font-weight: normal;
+    font-style: normal;
+}
+
 a {
     text-decoration: none;
     color: inherit;

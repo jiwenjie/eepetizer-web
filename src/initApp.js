@@ -11,7 +11,7 @@ import installElementPlus from './plugins/element'
 export default async function initAppView(createApp) {
     try {
         const { userInfo } = await store.dispatch('setUserInfo')
-        console.log('initApp success');
+        console.log('initApp success', userInfo);
         const app = createApp(App)
         installElementPlus(app)
         app.use(router)

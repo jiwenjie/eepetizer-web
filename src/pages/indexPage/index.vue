@@ -28,6 +28,14 @@
         <div id="section-wrapper" class="section-wrapper" style="transform:matrix(1, 0, 0, 1, 0, 0);">
           <div class="section-slide">
             <section class="open animation-container">
+              <div id="container" class="box-3d">
+                <div class="loading"></div>
+                <!-- <video src="../../../public/video/eyepetizer-cover.mp4" preload id="video" loop="loop" muted="muted" class="video-item hide"></video> -->
+                <div class="words" id="wordBox" :style="wordsStyle">
+                  <h2 class="title" id="innerTitle">Feed your eyes, feed your soul.</h2>
+                  <h2 class="eye" id="innerEye">开眼，看更好的世界。</h2>
+                </div>
+              </div>
             </section>
           </div> 
         </div>
@@ -37,8 +45,112 @@
 </template>
 
 <script>
+import { reactive, onMounted, toRefs, ref } from 'vue'
 export default {
-  components: {},
+    components: {},
+    props: {
+        title: {
+            type: String,
+            default: '提示'
+        },
+        content: {
+            type: String,
+            default: '确定关闭吗？'
+        }
+    },
+    setup() {
+        // 界面中部的文字内容部分
+        const wordsStyle = reactive({
+          transform: "rotateX(0deg) rotateY(0deg)",
+          webkitTransform: "rotateX(0deg) rotateY(0deg)",
+          mozTransform: "rotateX(0deg) rotateY(0deg)",
+          msTransform: "rotateX(0deg) rotateY(0deg)",
+          oTransform: "rotateX(0deg) rotateY(0deg)",
+        })
+
+        onMounted(async () => {
+            // Init
+            let container = document.getElementById("container"),
+              wordDom = document.getElementById("wordBox");
+
+            // Mouse
+            let mouse = {
+              _x: 0,
+              _y: 0,
+              x: 0,
+              y: 0,
+              
+              updatePosition: function(event) {
+                let e = event || window.event;
+                this.x = e.clientX - this._x;
+                this.y = (e.clientY - this._y) * -1;
+              },
+
+              setOrigin: function(e) {
+                this._x = e.offsetLeft + Math.floor(e.offsetWidth / 2);
+                this._y = e.offsetTop + Math.floor(e.offsetHeight / 2);
+              },
+
+              show: function() {
+                return "(" + this.x + ", " + this.y + ")";
+              }
+            };
+
+            // Track the mouse position relative to the center of the container.
+            mouse.setOrigin(container);
+
+            //-----------------------------------------
+
+            let counter = 0;
+            let updateRate = 10;
+            let isTimeToUpdate = function() {
+              return counter++ % updateRate === 0;
+            };
+
+            //-----------------------------------------
+            let onMouseEnterHandler = function(event) {
+              update(event);
+            };
+
+            let onMouseLeaveHandler = function() {
+              console.log('mouseLeave---')
+            };
+
+            let onMouseMoveHandler = function(event) {
+              if (isTimeToUpdate()) {
+                update(event);
+              }
+            };
+
+            //-----------------------------------------
+            let update = function(event) {
+              mouse.updatePosition(event);
+              // 分别设置样式
+              updateTransformStyle(
+                (mouse.y / (wordDom.offsetHeight / 6)).toFixed(2),
+                (mouse.x / (wordDom.offsetWidth / 12)).toFixed(2)
+                );
+            };
+
+            // 更新全局文字 sologn 样式调整
+            let updateTransformStyle = function(x, y) {
+              let style = "rotateX(" + x + "deg) rotateY(" + y + "deg)";
+              // 全局 sologn
+              wordsStyle.transform = style;
+              wordsStyle.webkitTransform = style;
+              wordsStyle.mozTransform = style;
+              wordsStyle.msTransform = style;
+              wordsStyle.oTransform = style;
+            };
+
+            //-----------------------------------------
+            container.onmouseenter = onMouseEnterHandler;
+            container.onmouseleave = onMouseLeaveHandler;
+            container.onmousemove = onMouseMoveHandler;
+        })
+
+        return { wordsStyle }
+    }
 }
 </script>
 
@@ -119,5 +231,99 @@ export default {
     list-style: none;
     padding: 0;
     height: 100%;
+  }
+
+  .index-container .animation-container {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+  }
+
+  .index-container .open {
+    position: relative;
+  }
+
+  .index-container section {
+    height: 100%;
+  }
+
+  .section-slide {
+    width: 100vw;
+    height: 100%;
+  }
+
+  .box-3d {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    margin-top: -8vh;
+    perspective: 400px;   /** 视距，查看的位置 */
+    transform-style: preserve-3d;   /** 动画模式，开启 3d 模式 */
+  }
+
+  .box-3d .words {
+    position: absolute;
+    z-index: 200;
+    transition: all .1s;
+    transform-origin: bottom;   /** 设置动画中心点 */
+  }
+
+  .box-3d .words .title {
+      font-family: AkzidenzGrotesk-Medium;
+      font-weight: 500;
+      font-size: 72px;
+      line-height: 72px;
+      text-align: center;
+      transition: all .1s;
+  }
+
+  .box-3d .words .eye {
+    font-family: SourceHanSansCN-Normal;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 38px;
+    letter-spacing: 8px;
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  @media screen and (min-height: 900px)  {
+    .box-3d .words .title {
+      font-size: 95px !important;
+      line-height: 97px !important;
+    }
+
+    .box-3d .words .eye {
+      font-size: 25px !important;
+      line-height: 37px !important;
+    }
+  }
+
+  @media screen and (min-height: 800px) {
+    .box-3d .words .title {
+      font-size: 84px !important;
+      line-height: 90px !important;
+    }
+
+    .box-3d .words .eye {
+      font-size: 25px !important;
+      line-height: 37px !important;
+    }
+  }
+
+  #innerTitle, #innerEye {
+    transition: all 0.1s;
+  }
+
+  .video-item {
+    width: 60vw;
+    /* transform: rotateX(22deg) rotateY(-20deg) */
+  }
+
+  .box-3d .hide {
+    /* display: none; */
   }
 </style> 
