@@ -7,7 +7,7 @@ export default [
     name: 'index',
     path: '/index',
     menuCode: '001',
-    component: 'indexPage/index'
+    component: 'indexPage/index/index'
   },
   {
     name: 'about',

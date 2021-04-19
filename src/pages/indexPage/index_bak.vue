@@ -3,6 +3,7 @@
  * @Date: 2021-03-23 14:03:07
  * @LastEditors: jiwenjie5
  * @Description: 添加新配置
+ * desc: 该部分为 css + 鼠标监听实现，界面打开时间长了之后发现动画会有滞涩的感觉，所以该文件备份，新文件全部使用 canvas 实现
  -->
 <template>
   <div id="indexDIV" class="index-container">
@@ -46,6 +47,9 @@
 
 <script>
 import { reactive, onMounted, toRefs, ref } from 'vue'
+import * as three from 'three';
+import {OrbitControls} from 'three-orbit-controls';
+
 export default {
     components: {},
     props: {

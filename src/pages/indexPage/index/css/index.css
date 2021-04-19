@@ -1,0 +1,163 @@
+.index-container {
+    background: #000;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    color: #fff;
+  }
+
+  .index-container .header, .index-container .header .nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .index-container .header {
+    max-width: 1440px;
+    min-width: 960px;
+    width: 100vw;
+    padding: 0 40px;
+    height: 8vh;
+    margin: 0 auto;
+    z-index: 1000;
+  } 
+
+  :not(input) :not(textarea) {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+
+  .index-container .header .logo {
+    display: block;
+    width: 170px;
+    height: 20.88px;
+    -o-object-fit: cover;
+    object-fit: cover;
+  }
+
+  .index-container .header .nav .nav-item.active {
+    font-family: SourceHanSansCN-Medium;
+    font-weight: 700;
+  }
+  
+  .index-container .header .nav .nav-item {
+      font-family: SourceHanSansCN-Light;
+      font-size: 14px;
+      line-height: 18px;
+      letter-spacing: 0;
+      text-align: center;
+      color: #fff;
+      margin-left: 68px;
+  }
+
+  .main {
+      height: 92vh;
+      position: relative;
+  }
+
+  .index-container .section-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    transition-property: transform;
+    box-sizing: content-box;
+}
+
+  .index-container .section-container {
+    margin-left: auto;
+    margin-right: auto;
+    overflow: hidden;
+    list-style: none;
+    padding: 0;
+    height: 100%;
+  }
+
+  .index-container .animation-container {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+  }
+
+  .index-container .open {
+    position: relative;
+  }
+
+  .index-container section {
+    height: 100%;
+  }
+
+  .section-slide {
+    width: 100vw;
+    height: 100%;
+  }
+
+  .box-3d {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    margin-top: -8vh;
+    perspective: 600px;   /** 视距，查看的位置 */
+    transform-style: preserve-3d;   /** 动画模式，开启 3d 模式 */
+  }
+
+  .box-3d .words {
+    position: absolute;
+    z-index: 200;
+    /* transform-origin: bottom;    */
+  }
+
+  .box-3d .words .title {
+      font-family: AkzidenzGrotesk-Medium;
+      font-weight: 500;
+      font-size: 72px;
+      line-height: 72px;
+      text-align: center;
+      transition: all .1s;
+  }
+
+  .box-3d .words .eye {
+    font-family: SourceHanSansCN-Normal;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 38px;
+    letter-spacing: 8px;
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  @media screen and (min-height: 900px)  {
+    .box-3d .words .title {
+      font-size: 95px !important;
+      line-height: 97px !important;
+    }
+
+    .box-3d .words .eye {
+      font-size: 25px !important;
+      line-height: 37px !important;
+    }
+  }
+
+  @media screen and (min-height: 800px) {
+    .box-3d .words .title {
+      font-size: 84px !important;
+      line-height: 90px !important;
+    }
+
+    .box-3d .words .eye {
+      font-size: 25px !important;
+      line-height: 37px !important;
+    }
+  }
+
+  /* three 相关样式内容 */
+  .box-3d .three {
+    width: 100vw;
+    z-index: 100;
+  }
