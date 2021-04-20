@@ -234,3 +234,42 @@
     left: 0;
     bottom: 0;
   }
+
+  .chosen-video .active {
+    opacity: 1;
+  }
+
+  .chosen-video {
+    position: relative;
+    margin-left: 15vw;
+    margin-right: 200px;
+    height: 100%;
+    max-height: 810px;
+    opacity: 0;
+    transition-duration: .5s;
+    transition-delay: .3s;
+  }
+
+  .chosen-video .header {
+    position: absolute;
+    left: 0;
+    top: 140px;
+  }
+
+  .chosen-video .header .title {
+    font-family: SourceHanSansCN-Normal;
+    font-size: 26px;
+    line-height: 39px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-align: left;
+    z-index: 150;
+  }
+
+  .chosen-video .header .desc {
+    font-family: SourceHanSansCN-Light;
+    font-size: 14px;
+    line-height: 15px;
+    letter-spacing: 1.3966px;
+    margin-top: 10px;
+  }

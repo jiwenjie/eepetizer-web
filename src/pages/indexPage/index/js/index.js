@@ -1,10 +1,8 @@
 import { reactive, onMounted, toRefs, ref } from 'vue'
 
 import * as THREE from 'three';
-
-// import { OrbitControls } from 'OrbitControls';
-// import { CSS2DRenderer, CSS2DObject } from 'CSS2DRenderer.js';
-// import { OrbitControls } from 'three-orbit-controls';
+// 导入控制器方式如下
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js"
 
 export default {
     name: 'Box3D',
@@ -28,8 +26,9 @@ export default {
         // renderer: null,
         // mesh: null,
         // videoDom: null,
-
         wordStyle: {},
+
+        scrollLeftList: [],   // 滚动 list 列表
       }
     },
 
@@ -41,6 +40,7 @@ export default {
     },
 
     mounted () {
+      // 关于首页视频播放和动画相关的代码内容
       this.getClientSize();   // 获取当前全屏的宽高部分
       this.initThree(); // 初始化 three.js 准备相关 video 的播放
       this.initVideoPlay();  // 初始化播放视频
@@ -49,10 +49,42 @@ export default {
         this.addMouseMove();
       })
       this.onWindowResize();  // 设置浏览器全局的 rsize 事件
+
+      // 设置全局的鼠标滑轮滚动监听事件
+      // this.initSize();  // 初始化屏幕 size
+      // this.initScroll();
     },
 
     methods: {
-      // 初始化 three
+      /**** ---------------------------------------------------------------------------------------------- */
+
+      // 屏幕滚动内容有关
+      initSize() {
+        this.initSwiperList();
+      },
+
+      // 初始化滚动列表内容
+      initScroll() {
+        window.addEventListener("mousewheel", this.handleScroll, !0) || window.addEventListener("DOMMouseScroll", this.handleScroll, !1)
+      },
+
+      // 初始化 swiperList
+      initSwiperList() {
+        let 
+          selectionList = [],
+          index = 0;
+        
+        
+      },
+
+      // 对鼠标滚轮事件的处理
+      handleScroll() {
+
+      },
+
+      /**** -------------------------------------------------------------------------------------------- */
+
+      // 初始化 three.js 内容
       initThree() {
         this.init();  // 初始化部分
         this.animate();   // 开启动画
@@ -81,25 +113,19 @@ export default {
         this.scene = new THREE.Scene();
 
         let three = document.getElementById("three");
-        // 第一个属性是视野角度（FOV）。视野角度就是无论在什么时候，你所能在显示器上看到的场景的范围，它的值是一个角度。
-        // 第二个值是长宽比（aspect ratio）。 也就是你用一个物体的宽除以它的高的比值。比如说，当你在一个宽屏电视上播放老电影时，
-        // 可以看到图像仿佛是被压扁的。
-        this.camera = new THREE.PerspectiveCamera(45, this.clientWidth / this.clientHeight, 0.1, 1000);
+        // 该构造函数总共有四个参数，分别是fov，aspect，near，far 。
+        // fov表示摄像机视锥体垂直视野角度，最小值为0，最大值为180，默认值为50，实际项目中一般都定义45，因为45最接近人正常睁眼角度；
+        // aspect表示摄像机视锥体长宽比，默认长宽比为1，即表示看到的是正方形，实际项目中使用的是屏幕的宽高比；
+        // near表示摄像机视锥体近端面，这个值默认为0.1，实际项目中都会设置为1；
+        // far表示摄像机视锥体远端面，默认为2000，这个值可以是无限的，说的简单点就是我们视觉所能看到的最远距离。
+        this.camera = new THREE.PerspectiveCamera(45, this.clientWidth / this.clientHeight, .1, 1000);
+        // this.camera = new THREE.PerspectiveCamera(45, this.clientWidth / this.clientHeight, 1, 1000);
+        // this.camera.position.set(0, 40, 100);
+        // this.camera.lookAt(new THREE.Vector3(0, 0, 0));
+        
         //设置相机的位置
-        this.camera.position.set(0, 0, 6);
+        this.camera.position.set(0, 0, 15);
         this.scene.add(this.camera);    // 把摄像机添加到场景里去
-
-        // 渲染器（Renderer）两种生成方式; 一种是直接和已有的 canvas 绑定, 另外一种是通过 three.js 自身创建生成 canvas 元素
-
-        // 如果布局中已有 canvas 元素, 需要和 canvas 的 id 绑定的话
-        // var renderer = new THREE.WebGLRenderer({
-        //   canvas: document.getElementById('mainCanvas')
-        // });
-
-        // 如果布局中没有 canvas, 需要使用 three.js 自己生成的话
-        // var renderer = new THREE.WebGLRenderer();
-        // renderer.setSize(400, 300);
-        // document.getElementsByTagName('body')[0].appendChild(renderer.domElement);
 
         // antialias（是否启用抗锯齿）
         this.renderer = new THREE.WebGLRenderer({
@@ -112,24 +138,31 @@ export default {
         this.renderer.shadowMap.enabled = true;
         three.appendChild(this.renderer.domElement);
         this.initBox(); // 初始化网格盒子
+
+        this.initControls();  // 初始化控制器
       },
       
       // 初始化创建网格模型
       initBox() {
         this.initVideoTextures();
+
+        //辅助工具
+        // let helper = new THREE.AxesHelper(50);
+        // this.scene.add(helper);
+
         // 创建一个视频面，用来同步展示视频 video 的纹理，二维平面和三维平面同步展示视频纹理都没有问题，看自己的喜好设置即可
 
         // tips: 这几个平面都可以实现该效果，内部通过帧播放视频的原理是一致的，所以可以自己尝试，不过对 three.js 中具体的 api 需要多看文档才能更深入了解
         // this.geometry = new THREE.PlaneGeometry(5.2357, 3);    // 二维平面
-        this.geometry = new THREE.BoxGeometry(5.2357, 3, 10);   // 三维
-        // this.geometry = new THREE.BoxBufferGeometry(887 / 64, 509 / 64, 10);   // 三维立方体
+        // this.geometry = new THREE.BoxGeometry(5.2357, 3, 10);   // 三维
+        this.geometry = new THREE.BoxBufferGeometry(10, 5, 5);   // 三维立方体
 
         // 创建材质对象，把视频的纹理添加到材质对象中去
         this.material = new THREE.MeshBasicMaterial({
             map: this.texture   // 设置纹理贴图
         });
         this.cube = new THREE.Mesh(this.geometry, this.material);   // 网格模型对象Mesh
-        this.cube.position.z = -5;    // 改变该参数值相当于把场景拉远拉近，可以看到视频播放内容大小改变
+        // this.cube.position.z = -5;    // 改变该参数值相当于把场景拉远拉近，可以看到视频播放内容大小改变
         this.scene.add(this.cube);
       },
 
@@ -146,6 +179,30 @@ export default {
         this.texture.minFilter = THREE.LinearFilter;
       },
 
+      // 初始化控制器
+      initControls() {
+        this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+        //设置控制器的中心点
+        //controls.target.set( 0, 5, 0 );
+        // 如果使用animate方法时，将此函数删除
+        //controls.addEventListener( 'change', render );
+        // 使动画循环使用时阻尼或自转 意思是否有惯性
+        this.controls.enableDamping = true;
+        //动态阻尼系数 就是鼠标拖拽旋转灵敏度
+        //controls.dampingFactor = 0.25;
+        //是否可以缩放
+        this.controls.enableZoom = true;
+        //是否自动旋转
+        this.controls.autoRotate = false;
+        this.controls.autoRotateSpeed = 0.5;
+        //设置相机距离原点的最远距离
+        this.controls.minDistance = 1;
+        //设置相机距离原点的最远距离
+        this.controls.maxDistance = 1000;
+        //是否开启右键拖拽
+        this.controls.enablePan = true;
+      },
+
       // 添加鼠标监听事件
       addMouseMove() {
         // 设置鼠标滚动监听事件
@@ -158,8 +215,9 @@ export default {
           widthX = event.clientX - this.clientWidth / 2, 
           heightY = -(event.clientY - this.clientHeight / 2);
 
-        // 调整设置摄像头的观看角度设置，使得成像背景有立体的动画效果实现  0.000271828 
-        this.camera.lookAt(new THREE.Vector3(0.000271828 * widthX, 0.000271828 * heightY, 3));
+        // 调整设置摄像头的观看角度设置，使得成像背景有立体的动画效果实现; 3e-4 表示 3 乘以 10 的 -4 次方
+        // this.camera.lookAt(new THREE.Vector3(0.0003 * widthX, 0.0003 * heightY, 3));
+        // this.camera.lookAt(new THREE.Vector3(0.000271828 - 4 * widthX, 0.000271828 * heightY, 3));
 
         // 根据鼠标滚动调整设置内部的样式修改，该方法在一直运行的清空下也不会出现卡顿的清空；
         // 初次实现的代码备份在 index_bak.vue 文件中，此种方式在界面打开长时间后在鼠标移动执行动画的时候会出现较为明显的卡顿现象，体验不好
@@ -175,7 +233,8 @@ export default {
         // console.log('camera', this.camera)
         // 开启帧动画，每次浏览器执行刷新的时候执行该动画
         requestAnimationFrame(this.animate);
+        this.controls.update();
         this.renderer.render(this.scene, this.camera);
-      }
+      },
     }
 }
