@@ -31,16 +31,29 @@
             <section class="open animation-container">
               <!-- 动画区域内容框，全屏 -->
               <div id="container" class="box-3d">
+                <!-- 此处把原始的 video 标签隐藏，实际在界面中的播放效果使用 three.js 中的 videoTexture 视频纹理替代 -->
+                <!-- <video src="../../../../public/video/eyepetizer-cover.mp4" preload id="video" loop="loop" muted="muted" class="testVideo"></video>  -->
                 <video src="../../../../public/video/eyepetizer-cover.mp4" preload id="video" loop="loop" muted="muted" class="hide"></video> 
                 <div class="words" id="wordBox" :style="wordStyle">
-                  <h2 class="title" id="innerTitle">Feed your eyes, feed your soul.</h2>
+                  <h2 class="title" id="innerTitle" >Feed your eyes, feed your soul.</h2>
                   <h2 class="eye" id="innerEye">开眼，看更好的世界。</h2>
                 </div>
                 <!-- three 相关布局代码 -->
-                <div id="three" class="three">
-                  <canvas :width="clientWidth" :height="clientHeight" :style="threeStyle"></canvas>
-                </div>
+                <!-- 设置 three.js 场景,设置后会自动载内部生成 canvas -->
+                <div id="three" class="three"></div>
               </div>
+
+              <!-- 界面 foot 部分,显示 android 和 ios 对应的移动应用 -->
+              <footer class="download">
+                <div class="btn-box">
+                  <div class="btn ios">App Store</div>
+                  <img src="@/assets/pageImg/ios.png" alt="" class="img-code ios-code">
+                </div>
+                <div class="btn-box">
+                  <div class="btn android">Android</div>
+                  <img src="@/assets/pageImg/android.png" alt="" class="img-code android-code">
+                </div>
+              </footer>
             </section>
           </div> 
         </div>

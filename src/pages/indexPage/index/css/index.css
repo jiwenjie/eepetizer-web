@@ -109,7 +109,7 @@
 
   .box-3d .words {
     position: absolute;
-    z-index: 200;
+    z-index: 999;
     /* transform-origin: bottom;    */
   }
 
@@ -158,6 +158,79 @@
 
   /* three 相关样式内容 */
   .box-3d .three {
+    position: absolute;
     width: 100vw;
-    z-index: 100;
+    z-index: 99;
+  }
+
+  .download {
+    z-index: 300;
+    position: absolute;
+    bottom: 60px;
+    left: 0;
+    right: 0;
+    text-align: center;
+  }
+
+  .btn-box {
+    position: relative;
+    display: inline-block;
+  }
+
+  /** 设置 hover 样式,调整背景颜色和图片显示 */
+  .btn-box:hover .btn {
+    background: hsla(0, 0%, 100%, .2);
+    opacity: 1;
+  }
+
+  .btn-box:hover .img-code {
+    display: block;
+  }
+
+  .img-code {
+    display: none;
+  }
+
+  .index-container .download .btn {
+    display: inline-block;
+    font-family: SourceHanSansCN-Normal;
+    font-size: 14px;
+    line-height: 34px;
+    letter-spacing: 0;
+    text-align: center;
+    border: .83735px solid hsla(0, 0%, 100%, .57);
+    box-sizing: border-box;
+    width: 100px;
+    height: 34px;
+    border-radius: 34px;  
+    transition: background .3s;
+    opacity: .6;
+  }
+
+  .index-container .download img {
+    width: 100px;
+    height: 100px;
+  }
+
+  .index-container .download .android-code, 
+  .index-container .download .ios-code {
+    position: absolute;
+    left: 0;
+    top: -120px;
+}
+
+  .index-container .download .btn.ios {
+    margin-right: 26px;
+  }
+
+  .hide {
+    display: none;
+  }
+
+  .testVideo {
+    width: 300px;
+    height: 300px;
+    position: fixed;
+    left: 0;
+    bottom: 0;
   }
