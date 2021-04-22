@@ -119,9 +119,6 @@ export default {
         // near表示摄像机视锥体近端面，这个值默认为0.1，实际项目中都会设置为1；
         // far表示摄像机视锥体远端面，默认为2000，这个值可以是无限的，说的简单点就是我们视觉所能看到的最远距离。
         this.camera = new THREE.PerspectiveCamera(45, this.clientWidth / this.clientHeight, .1, 1000);
-        // this.camera = new THREE.PerspectiveCamera(45, this.clientWidth / this.clientHeight, 1, 1000);
-        // this.camera.position.set(0, 40, 100);
-        // this.camera.lookAt(new THREE.Vector3(0, 0, 0));
         
         //设置相机的位置
         this.camera.position.set(0, 0, 15);
@@ -139,14 +136,16 @@ export default {
         three.appendChild(this.renderer.domElement);
         this.initBox(); // 初始化网格盒子
 
-        this.initControls();  // 初始化控制器
+        // 开启控制器后在动态改变 camera 的 lookAt 效果会消失，此时可以手动拖拽旋转视频播放的立方体
+        // 如果注释该行，关闭控制器则可以看到根据鼠标修改移动 lookAt 的效果展示（tips：目前的效果就是在移动的时候会遮挡住文字，此处可能需要细细调校才行）
+        // this.initControls();  // 初始化控制器
       },
       
       // 初始化创建网格模型
       initBox() {
         this.initVideoTextures();
 
-        //辅助工具
+        // 辅助工具,增加中心指引线
         // let helper = new THREE.AxesHelper(50);
         // this.scene.add(helper);
 
@@ -155,7 +154,7 @@ export default {
         // tips: 这几个平面都可以实现该效果，内部通过帧播放视频的原理是一致的，所以可以自己尝试，不过对 three.js 中具体的 api 需要多看文档才能更深入了解
         // this.geometry = new THREE.PlaneGeometry(5.2357, 3);    // 二维平面
         // this.geometry = new THREE.BoxGeometry(5.2357, 3, 10);   // 三维
-        this.geometry = new THREE.BoxBufferGeometry(10, 5, 5);   // 三维立方体
+        this.geometry = new THREE.BoxBufferGeometry(11, 7, 6);   // 三维立方体
 
         // 创建材质对象，把视频的纹理添加到材质对象中去
         this.material = new THREE.MeshBasicMaterial({
@@ -181,6 +180,10 @@ export default {
 
       // 初始化控制器
       initControls() {
+        // 配合控制器使用，设置 camera 的位置和 lookAt 的原点方向
+        this.camera.position.set(0, 40, 100);
+        this.camera.lookAt(new THREE.Vector3(0, 0, 0));
+
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
         //设置控制器的中心点
         //controls.target.set( 0, 5, 0 );
@@ -216,8 +219,7 @@ export default {
           heightY = -(event.clientY - this.clientHeight / 2);
 
         // 调整设置摄像头的观看角度设置，使得成像背景有立体的动画效果实现; 3e-4 表示 3 乘以 10 的 -4 次方
-        // this.camera.lookAt(new THREE.Vector3(0.0003 * widthX, 0.0003 * heightY, 3));
-        // this.camera.lookAt(new THREE.Vector3(0.000271828 - 4 * widthX, 0.000271828 * heightY, 3));
+        this.camera.lookAt(new THREE.Vector3(0.0003 * widthX, 0.0003 * heightY, 3));
 
         // 根据鼠标滚动调整设置内部的样式修改，该方法在一直运行的清空下也不会出现卡顿的清空；
         // 初次实现的代码备份在 index_bak.vue 文件中，此种方式在界面打开长时间后在鼠标移动执行动画的时候会出现较为明显的卡顿现象，体验不好
@@ -233,7 +235,7 @@ export default {
         // console.log('camera', this.camera)
         // 开启帧动画，每次浏览器执行刷新的时候执行该动画
         requestAnimationFrame(this.animate);
-        this.controls.update();
+        this.controls && this.controls.update();
         this.renderer.render(this.scene, this.camera);
       },
     }
