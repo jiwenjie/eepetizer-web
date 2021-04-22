@@ -29,7 +29,7 @@
         <div id="section-wrapper" class="section-wrapper" style="transform:matrix(1, 0, 0, 1, 0, 0);">
         <!-- <div id="section-wrapper" class="section-wrapper" style="transform:matrix(1, 0, 0, 1, -1920, 0);"> -->
           <!-- 首页 slide01，首页文字提示和引导视频 -->
-          <div class="section-slide">
+          <div class="section-slide" @mousewheel="(event) => indexPageMouseWheel(event, '0')" :class="curPageIndex > 0 ? 'move-page-index':''">
             <section class="open animation-container">
               <div id="container" class="box-3d">
                 <video src="../../../../public/video/eyepetizer-cover.mp4" preload id="video" loop="loop" muted="muted" class="hide"></video> 
@@ -53,15 +53,44 @@
           </div> 
 
           <!-- 首页 slide02，精选创意视频 part2 -->
-          <div class="section-slide">
+          <div class="section-slide" @mousewheel="testMouseWheel">
+          <!-- <div class="section-slide" @mousewheel="(event) => indexPageMouseWheel(event, '1')"> -->
             <section class="animation-container">
-              <div class="chosen-video acive">
-                <header class="header" style="transform: matrix(1, 0, 0, 1, 0, 0);">
+              <div class="chosen-video active">
+                <header class="header header-subtitle">
                   <h2 class="title">精选创意视频</h2> 
                   <p class="desc"> 汇聚全球优质视频内容，让你大开眼界；了解各领域全新动态，启迪你的生活灵感。</p>
                 </header>
-                <!-- <main></main>
-                <nav></nav> -->
+                 <main class="content">
+                   <ul>
+                     <li class="video-item appearTogether leave bottom" 
+                        v-for="(videoItem, index) in ulList01" :key="videoItem.id" 
+                        :style="`transition-delay:${300 + index * 500}ms;`">
+                        <a :href="videoItem.hrefUrl">
+                          <div class="video-box">
+                              <div class="video-hover">
+                                <img :src="videoItem.imgUrl" alt="视频" class="cover"> 
+                                <video autoplay="autoplay" loop="loop" muted="muted" 
+                                  :src="videoItem.videoUrl" class="preview" />
+                              </div>
+                          </div> 
+                          <p>{{videoItem.desc}}</p> 
+                          <div class="line"></div>
+                        </a>
+                     </li>
+                   </ul>
+                 </main>
+                <nav class="nav" style="transform: matrix(1, 0, 0, 1, 720, 0);">
+                  <ul>
+                    <li class="nav-item">每日推荐</li>
+                    <li class="nav-item">旅行</li>
+                    <li class="nav-item">运动</li>
+                    <li class="nav-item">摄影</li>
+                    <li class="nav-item active">艺术</li> 
+                    <a href="/video/video-list" class="nav-item">查看全部</a>
+                  </ul> 
+                  <img src="@/assets/pageImg/Scroll.png" alt="scroll" class="scroll">
+                </nav>
               </div>
             </section>
           </div>
