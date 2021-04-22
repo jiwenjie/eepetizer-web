@@ -4,6 +4,9 @@ import * as THREE from 'three';
 // 导入控制器方式如下
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js"
 
+// 导入首页视频展示数据
+import simulation from '@/api/simulationData';
+
 export default {
     name: 'Box3D',
     components: {},
@@ -28,7 +31,10 @@ export default {
         // videoDom: null,
         wordStyle: {},
 
-        scrollLeftList: [],   // 滚动 list 列表
+        // scrollLeftList: [],   // 滚动 list 列表
+        curPageIndex: 0,    // 首页打算做三块，第一块是首页 logo 和视频，第二块是精选视频，第三块是其他展示部分
+
+        ulList01: [],   // 创意视频部分
       }
     },
 
@@ -50,39 +56,62 @@ export default {
       })
       this.onWindowResize();  // 设置浏览器全局的 rsize 事件
 
-      // 设置全局的鼠标滑轮滚动监听事件
-      // this.initSize();  // 初始化屏幕 size
-      // this.initScroll();
+      this.initScroll();    // 增加全局的鼠标滚动事件监听
     },
 
     methods: {
-      /**** ---------------------------------------------------------------------------------------------- */
-
-      // 屏幕滚动内容有关
-      initSize() {
-        this.initSwiperList();
-      },
-
       // 初始化滚动列表内容
       initScroll() {
-        window.addEventListener("mousewheel", this.handleScroll, !0) || window.addEventListener("DOMMouseScroll", this.handleScroll, !1)
+        // window.addEventListener("mousewheel", this.handleScroll, !0) || window.addEventListener("DOMMouseScroll", this.handleScroll, !1);
       },
 
-      // 初始化 swiperList
-      initSwiperList() {
-        let 
-          selectionList = [],
-          index = 0;
-        
-        
+      // event mousewheel, curPageIndex 参数表示当前所在的全局 page 是第几页，下标从 0 开始，一共是 3 页
+      indexPageMouseWheel(event, curPageIndex) {
+        // let direction = event.deltaY > 0 ? 'down':'up';  //deltaY为正则滚轮向下，为负滚轮向上
+        console.log('event', event);
+        console.log('curPageIndex', curPageIndex);
+        switch (curPageIndex) {
+          case '0': {
+            if (event.deltaY > 0) {
+              this.curPageIndex = 1;
+    
+              this.loadVideoList();   // 获取创意视频列表数据  
+            }
+            break;
+          }
+          case '1': {
+            if (event.deltaY > 0) {
+
+            } else {
+
+            }
+            break;
+          }
+          case '2': {
+            break;
+          }
+          default: {
+
+          }
+        }
       },
 
-      // 对鼠标滚轮事件的处理
-      handleScroll() {
+      // 测试鼠标滚轮事件
+      testMouseWheel() {
 
       },
 
-      /**** -------------------------------------------------------------------------------------------- */
+      // 获取各个种类的创意视频
+      loadVideoList() {
+        // 存放每日推荐视频内容
+        this.ulList01 = simulation.dailyRecommendation;
+      },
+
+      // 全局 windows 下的鼠标滚动事件处理
+      handleScroll(event) {
+        let direction = event.deltaY > 0 ? 'down':'up';  //deltaY为正则滚轮向下，为负滚轮向上
+        console.log('window handleScroll direction', direction);
+      },
 
       // 初始化 three.js 内容
       initThree() {
