@@ -1,3 +1,9 @@
+/*
+ * @Author: jiwenjie5 
+ * @Date: 2021-04-Fr 08:37:32 
+ * @Last Modified by:   jiwenjie5 
+ * @Last Modified time: 2021-04-Fr 08:37:32 
+ */
 import { reactive, onMounted, toRefs, ref } from 'vue'
 
 import * as THREE from 'three';
@@ -31,10 +37,25 @@ export default {
         // videoDom: null,
         wordStyle: {},
 
-        // scrollLeftList: [],   // 滚动 list 列表
         curPageIndex: 0,    // 首页打算做三块，第一块是首页 logo 和视频，第二块是精选视频，第三块是其他展示部分
 
-        ulList01: [],   // 创意视频部分
+        ulVideoList: [],   // 创意视频部分
+
+        // 首页内容第二屏，精选创意视频部分
+        featuredObj: {
+          length: 2443,   // 每个类型有六个数据，加上间距，总长是 2443px   588  576
+          curtranslateX: 0, // 当前已经滚动了多少距离
+          cantranslateX: 0,    // 可以滚动的距离，该距离为内容区域总长度 - 界面总宽度 + 30vw
+        },
+
+        // 首页内容第三屏，有关开眼视频内容的介绍
+        indexPage3: {
+          length: 3730,   // 每个类型有六个数据，加上间距，总长是 2443px   588  576
+          curtranslateX: 0, // 当前已经滚动了多少距离
+          cantranslateX: 0,    // 可以滚动的距离，该距离为内容区域总长度 - 界面总宽度 + 30vw
+        },
+
+        videoTyeIndex: 0,   // 首页第二个创意视频模块下标，默认为每日推荐
       }
     },
 
@@ -51,26 +72,18 @@ export default {
       this.initThree(); // 初始化 three.js 准备相关 video 的播放
       this.initVideoPlay();  // 初始化播放视频
       this.$nextTick(() => {
-        // 开启全局鼠标移动监听动画
+        // 开启全局鼠标移动监听动画 - 针对 three.js 实现的纹理播放视频
         this.addMouseMove();
       })
       this.onWindowResize();  // 设置浏览器全局的 rsize 事件
-
-      this.initScroll();    // 增加全局的鼠标滚动事件监听
     },
 
     methods: {
-      // 初始化滚动列表内容
-      initScroll() {
-        // window.addEventListener("mousewheel", this.handleScroll, !0) || window.addEventListener("DOMMouseScroll", this.handleScroll, !1);
-      },
-
       // event mousewheel, curPageIndex 参数表示当前所在的全局 page 是第几页，下标从 0 开始，一共是 3 页
       indexPageMouseWheel(event, curPageIndex) {
-        // let direction = event.deltaY > 0 ? 'down':'up';  //deltaY为正则滚轮向下，为负滚轮向上
-        console.log('event', event);
-        console.log('curPageIndex', curPageIndex);
+        // let direction = event.deltaY > 0 ? 'down':'up';  // deltaY 为正则滚轮向下，为负滚轮向上
         switch (curPageIndex) {
+          // 当前是首页 page 中的第一页的时候
           case '0': {
             if (event.deltaY > 0) {
               this.curPageIndex = 1;
@@ -81,36 +94,51 @@ export default {
           }
           case '1': {
             if (event.deltaY > 0) {
-
+              // 滚轮向下
+              // 此时判断如果没有滚动到最后一块数据则滚动屏幕内容，如果滚动到了最后一条数据则翻页
+              this.featuredObj.curtranslateX +=  event.deltaY;
+              if (this.featuredObj.curtranslateX > this.featuredObj.cantranslateX) {
+                this.curPageIndex = 2;
+              }
             } else {
-
+              // 滚轮向上
+              if (this.featuredObj.curtranslateX <= 0) {
+                this.curPageIndex = 0;
+              } else {
+                this.featuredObj.curtranslateX +=  event.deltaY;
+              }
             }
             break;
           }
           case '2': {
+            // indexPage3
+            // let direction = event.deltaY > 0 ? 'down':'up';  // deltaY 为正则滚轮向下，为负滚轮向上
+            if (event.deltaY > 0) {
+              //   // 滚轮向下
+              if (this.indexPage3.curtranslateX < this.indexPage3.cantranslateX) {
+                this.indexPage3.curtranslateX +=  event.deltaY;
+              }
+            } else {
+              // 滚轮向上
+              if (this.indexPage3.curtranslateX <= 0) {
+                this.curPageIndex = 1;    // 界面移动到上一个界面中去
+                this.featuredObj.curtranslateX = 0;   // 重置分界面的偏移量数值
+              } else {
+                this.indexPage3.curtranslateX += event.deltaY;
+              }
+            }
             break;
           }
           default: {
-
+            console.log('无匹配内容...')
           }
         }
-      },
-
-      // 测试鼠标滚轮事件
-      testMouseWheel() {
-
       },
 
       // 获取各个种类的创意视频
       loadVideoList() {
         // 存放每日推荐视频内容
-        this.ulList01 = simulation.dailyRecommendation;
-      },
-
-      // 全局 windows 下的鼠标滚动事件处理
-      handleScroll(event) {
-        let direction = event.deltaY > 0 ? 'down':'up';  //deltaY为正则滚轮向下，为负滚轮向上
-        console.log('window handleScroll direction', direction);
+        this.ulVideoList = simulation.dailyRecommendation;
       },
 
       // 初始化 three.js 内容
@@ -131,9 +159,19 @@ export default {
 
       onResize() {
         this.getClientSize();
-        this.camera.aspect = this.clientWidth / this.clientHeight;
-        this.camera.updateProjectionMatrix();
-        this.renderer.setSize(this.clientWidth, this.clientHeight);
+        this.camera && (this.camera.aspect = this.clientWidth / this.clientHeight);
+        this.camera && this.camera.updateProjectionMatrix();
+        this.renderer && this.renderer.setSize(this.clientWidth, this.clientHeight);
+
+        // 如果当前是首页内容的精选视频内容区域的时候
+        // if (this.curPageIndex == 1) {
+          this.featuredObj.cantranslateX = this.featuredObj.length - this.clientWidth * 0.7;
+        // }
+
+        // 需要计算首页内容滚动到第三页的时候
+        // if (this.curPageIndex == 2) {
+          this.indexPage3.cantranslateX = this.indexPage3.length - this.clientWidth;
+        // }
       },
 
       init() {
@@ -173,7 +211,6 @@ export default {
       // 初始化创建网格模型
       initBox() {
         this.initVideoTextures();
-
         // 辅助工具,增加中心指引线
         // let helper = new THREE.AxesHelper(50);
         // this.scene.add(helper);
@@ -267,5 +304,38 @@ export default {
         this.controls && this.controls.update();
         this.renderer.render(this.scene, this.camera);
       },
+
+      // 鼠标移入 videoItem 方法, 设置鼠标移入的时候播放视频
+      videoItemOver(videoItem) {
+        let video = document.getElementById(`ID${videoItem.id}`);
+        //给视频标签添加缓存播放---video标签属性。
+        video.setAttribute("autoplay","autoplay");
+        //给视频标签添加循环播放---video标签属性。
+        video.setAttribute("loop","loop");
+        //播放视频
+        video.play();
+      },
+
+      // 鼠标移出 videoItem 方法，设置鼠标移出的时候停止播放视频
+      videoItemOut(videoItem) {
+        let video = document.getElementById(`ID${videoItem.id}`);
+        //停止播放
+        video.pause();
+      },
+
+      // 视频类型切换点击事件
+      videoTypClick(videoTypIndex) {
+        this.videoTyeIndex = videoTypIndex;
+
+        let tempObj = {
+          0: simulation.dailyRecommendation,    // 每日推荐
+          1: simulation.travel,   // 旅行
+          2: simulation.movement,   // 运动
+          3: simulation.photography,  // 摄影模块
+          4: simulation.art      // 艺术模块
+        }
+
+        this.ulVideoList = tempObj[this.videoTyeIndex];   // 改变当前的 video 视频列表
+      }
     }
 }

@@ -6,6 +6,7 @@ let dailyRecommendation = [
         id: '222959',
         hrefUrl: '/video/video-detail?resource_id=222959&resource_type=pgc_video',
         imgUrl: 'http://img.kaiyanapp.com/339a74373a37637221ba788c7057db3a.png?imageMogr2/quality/60/format/jpg',
+        // imgUrl: 'http://img.kaiyanapp.com/339a74373a37637221ba788c7057db3a.png?imageMogr2/quality/60/format/jpg',
         desc: "一个点赞能改变什么？动画师的「桌面日常」",
         videoUrl: 'http://oss-cn-beijing.aliyuncs.com/static-thefair-bj/eyepetizer/pgc_video/video_summary/222959.mp4'
     },
@@ -13,6 +14,7 @@ let dailyRecommendation = [
         id: '250220',
         hrefUrl: '/video/video-detail?resource_id=250220&resource_type=pgc_video',
         imgUrl: 'http://img.kaiyanapp.com/0aa60f63960f619f064e2b1442c0ad5e.png?imageMogr2/quality/60/format/jpg',
+        // imgUrl: 'http://img.kaiyanapp.com/0aa60f63960f619f064e2b1442c0ad5e.png?imageMogr2/quality/60/format/jpg',
         desc: "广告版「婚姻故事」，埃及顶尖家电品牌",
         videoUrl: 'http://oss-cn-beijing.aliyuncs.com/static-thefair-bj/eyepetizer/pgc_video/video_summary/250220.mp4'
     },
@@ -20,6 +22,7 @@ let dailyRecommendation = [
         id: '250119',
         hrefUrl: '/video/video-detail?resource_id=250119&resource_type=pgc_video',
         imgUrl: 'http://img.kaiyanapp.com/9c4bc386ccf3929f9339512e3dbfd67a.png?imageMogr2/quality/60/format/jpg',
+        // imgUrl: 'http://img.kaiyanapp.com/9c4bc386ccf3929f9339512e3dbfd67a.png?imageMogr2/quality/60/format/jpg',
         desc: "国内创意热店获奖作品「赛博女刺客」",
         videoUrl: 'http://oss-cn-beijing.aliyuncs.com/static-thefair-bj/eyepetizer/pgc_video/video_summary/250119.mp4'
     },
@@ -27,6 +30,7 @@ let dailyRecommendation = [
         id: '249591',
         hrefUrl: '/video/video-detail?resource_id=249591&resource_type=pgc_video',
         imgUrl: 'http://img.kaiyanapp.com/50fac99799893b96589fc7f6f237cf86.png?imageMogr2/quality/60/format/jpg',
+        // imgUrl: 'http://img.kaiyanapp.com/50fac99799893b96589fc7f6f237cf86.png?imageMogr2/quality/60/format/jpg',
         desc: "加拿大影像创意：我，一位死宅青年",
         videoUrl: 'http://oss-cn-beijing.aliyuncs.com/static-thefair-bj/eyepetizer/pgc_video/video_summary/249591.mp4'
     },
@@ -34,6 +38,7 @@ let dailyRecommendation = [
         id: '250160',
         hrefUrl: '/video/video-detail?resource_id=250160&resource_type=pgc_video',
         imgUrl: 'http://img.kaiyanapp.com/8fc9d27753d44863a69d092187bf510e.jpeg?imageMogr2/quality/60/format/jpg',
+        // imgUrl: 'http://img.kaiyanapp.com/8fc9d27753d44863a69d092187bf510e.jpeg?imageMogr2/quality/60/format/jpg',
         desc: "移轴摩尔多瓦，小小的国家小小的可爱",
         videoUrl: 'http://oss-cn-beijing.aliyuncs.com/static-thefair-bj/eyepetizer/pgc_video/video_summary/250160.mp4'
     },
@@ -41,6 +46,7 @@ let dailyRecommendation = [
         id: '250074',
         hrefUrl: '/video/video-detail?resource_id=250074&resource_type=pgc_video',
         imgUrl: 'http://img.kaiyanapp.com/c7f3fc840c7dc16df3cc8f713008d0fa.jpeg?imageMogr2/quality/60/format/jpg',
+        // imgUrl: 'http://img.kaiyanapp.com/c7f3fc840c7dc16df3cc8f713008d0fa.jpeg?imageMogr2/quality/60/format/jpg',
         desc: "值得被看见，跨性别摄影师将镜头对准自己",
         videoUrl: 'http://oss-cn-beijing.aliyuncs.com/static-thefair-bj/eyepetizer/pgc_video/video_summary/250074.mp4'
     },
@@ -235,5 +241,6 @@ export default {
     dailyRecommendation,    // 每日推荐模块
     travel,         // 旅行模块
     movement,       // 运动模块
-    photography     // 摄影模块
+    photography,     // 摄影模块
+    art             // 艺术模块
 }
